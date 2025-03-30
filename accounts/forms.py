@@ -5,15 +5,13 @@ from django import forms
 from .models import CustomUser
 
 class CustomUserCreationForm(UserCreationForm):
-    age = forms.IntegerField(required=True)
 
     class Meta:
         model = CustomUser
-        fields = ["first_name", "last_name", "email", "password"]
+        fields = ["first_name", "last_name", "email"]
 
 class CustomUserChangeForm(UserChangeForm):
-    age = forms.IntegerField(required=True)
 
     class Meta:
         model = CustomUser
-        fields = ["first_name", "last_name", "email", "password"]
+        fields = ["first_name", "last_name", "email"]

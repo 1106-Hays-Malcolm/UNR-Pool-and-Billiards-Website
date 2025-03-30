@@ -1,7 +1,7 @@
 from django.contrib import admin
-from .models import Games
+from .models import Game
 
-class GamesAdmin(admin.ModelAdmin):
+class GameAdmin(admin.ModelAdmin):
     fieldsets = [
         ("Date and Time", {"fields": ["date_time"]}),
         ("Player 1 Rating", {"fields": ["player_1_rating"]}),
@@ -13,4 +13,4 @@ class GamesAdmin(admin.ModelAdmin):
     list_filter = ["date_time"]
     search_fields = []
 
-admin.site.register(Games, GamesAdmin)
+admin.site.register(Game, GameAdmin)
