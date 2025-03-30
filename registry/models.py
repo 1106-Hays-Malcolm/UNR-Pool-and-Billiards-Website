@@ -29,3 +29,8 @@ class Game(models.Model):
         DRAW = 3
 
     game_result = models.IntegerField(choices=PossibleGameResults)
+
+class Rating(models.Model):
+    rating = models.IntegerField()
+    rating_deviation = models.FloatField()
+    rating_volatility = models.FloatField()
