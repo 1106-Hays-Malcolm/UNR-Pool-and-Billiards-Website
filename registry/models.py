@@ -28,4 +28,4 @@ class Game(models.Model):
         PLAYER_2_WINS = 2
         DRAW = 3
 
-    gameResult = models.IntegerField(choices=PossibleGameResults)
+    game_result = models.IntegerField(choices=PossibleGameResults)

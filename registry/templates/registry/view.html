@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block title %}View Registry{% endblock %}
+
+{% block content %}
+<h2>Game Registry</h2>
+
+<hr>
+{% for game in game_list %}
+<p>
+    {{ game.player_1.first_name }} {{ game.player_1.last_name }} ({{ game.player_1_rating }} 
+        {% if game.player_1_rating_change >= 0 %}+{% endif %}{{ game.player_1_rating_change }}) vs. 
+    {{ game.player_2.first_name }} {{ game.player_2.last_name }} ({{ game.player_2_rating }} 
+    {% if game.player_2_rating_change >= 0 %}+{% endif %}{{ game.player_2_rating_change }})
+</p>
+<p>Referee: {{ game.referee.first_name }} {{ game.referee.last_name }}</p>
+<p>Game result: 
+    {% if game.game_result == 1 %}{{ game.player_1.first_name }} {{ game.player_1.last_name }} Wins
+    {% elif game.game_result == 2 %}{{ game.player_2.first_name }} {{ game.player_2.last_name }} Wins
+    {% elif game.game_result == 3 %}Draw
+    {% endif %}
+</p>
+<hr>
+{% endfor %}
+
+{% endblock %}
