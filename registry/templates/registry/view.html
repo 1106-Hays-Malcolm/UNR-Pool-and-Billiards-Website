@@ -10,15 +10,18 @@
 <hr>
 {% for game in game_list %}
 <p>
-    {{ game.player_1.first_name }} {{ game.player_1.last_name }} ({{ game.player_1_rating }} 
-        {% if game.player_1_rating_change >= 0 %}+{% endif %}{{ game.player_1_rating_change }}) vs. 
-    {{ game.player_2.first_name }} {{ game.player_2.last_name }} ({{ game.player_2_rating }} 
-    {% if game.player_2_rating_change >= 0 %}+{% endif %}{{ game.player_2_rating_change }})
+    <a href="{% url "registry:detail" game.player_1.id %}">{{ game.player_1.first_name }} {{ game.player_1.last_name }}</a> ({{ game.player_1_rating }} 
+        {% if game.player_1_rating_change >= 0 %}<span style="color: green">+{% else %}<span style="color: red">{% endif %}{{ game.player_1_rating_change }}</span>) vs. 
+
+    <a href="{% url "registry:detail" game.player_2.id %}">{{ game.player_2.first_name }} {{ game.player_2.last_name }}</a> ({{ game.player_2_rating }} 
+    {% if game.player_2_rating_change >= 0 %}<span style="color: green">+{% else %}<span style="color: red">{% endif %}{{ game.player_2_rating_change }}</span>)
 </p>
-<p>Referee: {{ game.referee.first_name }} {{ game.referee.last_name }}</p>
+
+<p>Referee: <a href="{% url "registry:detail" game.referee.id %}">{{ game.referee.first_name }} {{ game.referee.last_name }}</a></p>
+
 <p>Game result: 
-    {% if game.game_result == 1 %}{{ game.player_1.first_name }} {{ game.player_1.last_name }} Wins
-    {% elif game.game_result == 2 %}{{ game.player_2.first_name }} {{ game.player_2.last_name }} Wins
+    {% if game.game_result == 1 %}{{ game.player_1.first_name }} {{ game.player_1.last_name }} (Player 1) Wins
+    {% elif game.game_result == 2 %}{{ game.player_2.first_name }} {{ game.player_2.last_name }} (Player 2) Wins
     {% elif game.game_result == 3 %}Draw
     {% endif %}
 </p>

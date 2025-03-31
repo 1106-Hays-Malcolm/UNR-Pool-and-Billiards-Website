@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block title %}{{ player.first_name }} {{ player.last_name }}{% endblock %}
+
+{% block content %}
+<p>Name: {{ player.first_name }} {{ player.last_name }}</p>
+<p>Email Address: {{ player.email }}</p>
+<p>Rating: {{ player.rating.rating }}</p>
+<p>Rating Deviation: {{ rating_deviation }}</p>
+<p>Confidence interval: [{{ confidence_interval_min }}, {{ confidence_interval_max }}]</p>
+<p><a href={% url "registry:view" %}>Back to registry</a></p>
+{% endblock %}

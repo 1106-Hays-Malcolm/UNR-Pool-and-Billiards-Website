@@ -124,3 +124,43 @@ def add_game(request):
 
     else:
         raise PermissionDenied()
+    
+class PlayerDetailView(generic.DetailView):
+    template_name = "registry/detail.html"
+    context_object_name = "player"
+    model = CustomUser
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        player = CustomUser.objects.get(pk=self.kwargs["pk"])
+        utils.give_user_rating_if_no_rating(player)
+
+        context["rating_deviation"] = round(player.rating.rating_deviation)
+        context["confidence_interval_max"] = player.rating.rating + (2 * context["rating_deviation"])
+        context["confidence_interval_min"] = player.rating.rating - (2 * context["rating_deviation"])
+
+        if context["confidence_interval_min"] < 0:
+            context["confidence_interval_min"] = 0
+
+        return context
+    
+
+    # def get_context_data(self, player_id):
+    #     player = CustomUser.objects.get(pk=player_id)
+    #     utils.give_user_rating_if_no_rating(player)
+
+    #     player_info = {}
+
+    #     player_info["first_name"] = player.first_name
+    #     player_info["last_name"] = player.last_name
+    #     player_info["email"] = player.email
+    #     player_info["rating"] = player.rating.rating
+    #     player_info["rating_deviation"] = round(player.rating.rating_deviation)
+    #     player_info["confidence_interval_max"] = player_info["rating"] + (2 * player_info["rating_deviation"])
+    #     player_info["confidence_interval_min"] = player_info["rating"] - (2 * player_info["rating_deviation"])
+
+    #     if player_info["confidence_interval_min"] < 0:
+    #         player_info["confidence_interval_min"] = 0
+
+    #     return player_info
