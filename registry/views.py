@@ -6,10 +6,11 @@ from accounts.models import CustomUser
 from django.core.exceptions import PermissionDenied
 import registry.utils as utils
 from django.utils import timezone
-from django.urls import reverse
-from django.http import HttpResponseRedirect
+from django.urls import reverse, reverse_lazy
+from django.http import HttpResponseRedirect, Http404
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.contrib.auth.decorators import login_required, permission_required
+from .forms import AddGameForm
 
 
 class ViewGamesView(PermissionRequiredMixin, generic.ListView):
@@ -23,110 +24,108 @@ class ViewGamesView(PermissionRequiredMixin, generic.ListView):
         return games
 
 
-class GameAddFormView(PermissionRequiredMixin, generic.ListView):
+class GameAddFormView(PermissionRequiredMixin, generic.FormView):
     permission_required = ["registry.can_view_others_games", "registry.can_add_games", "registry.can_view_others_ratings"]
 
     template_name = "registry/add_game_form.html"
+    form_class = AddGameForm
     context_object_name = "players"
+    success_url = reverse_lazy("registry:view")
 
-    def get_queryset(self):
-        players = CustomUser.objects.order_by("first_name")
-        return players
+    def form_valid(self, form):
+        newGame = Game()
 
-@login_required
-@permission_required(["registry.can_view_others_games", "registry.can_add_games", "registry.can_view_others_ratings"], raise_exception=True)
-def add_game(request):
-    newGame = Game()
+        player_1 = form.cleaned_data["player_1"]
+        player_2 = form.cleaned_data["player_2"]
+        referee = self.request.user
 
-    player_1 = CustomUser.objects.get(pk=request.POST["player_1"])
-    player_2 = CustomUser.objects.get(pk=request.POST["player_2"])
-    referee = request.user
+        utils.give_user_rating_if_no_rating(player_1)
+        utils.give_user_rating_if_no_rating(player_2)
+        
+        if form.cleaned_data["game_result"] == "1":
+            game_result_player_1 = 1
+            game_result_player_2 = 0
+        elif form.cleaned_data["game_result"] == "2":
+            game_result_player_1 = 0
+            game_result_player_2 = 1
+        elif form.cleaned_data["game_result"] == "3":
+            game_result_player_1 = 0.5
+            game_result_player_2 = 0.5
 
-    utils.give_user_rating_if_no_rating(player_1)
-    utils.give_user_rating_if_no_rating(player_2)
+        player_1_rating_calculator = utils.Player()
+        player_1_rating_calculator.rating = player_1.rating.rating
+        player_1_rating_calculator.rd = player_1.rating.rating_deviation
+        player_1_rating_calculator.vol = player_1.rating.rating_volatility
+        
+        player_2_rating_calculator = utils.Player()
+        player_2_rating_calculator.rating = player_2.rating.rating
+        player_2_rating_calculator.rd = player_2.rating.rating_deviation
+        player_2_rating_calculator.vol = player_2.rating.rating_volatility
+
+        player_1_old_rating = player_1_rating_calculator.rating
+        player_2_old_rating = player_2_rating_calculator.rating
+
+        player_1_old_rating_deviation = player_1_rating_calculator.rd
+        player_2_old_rating_deviation = player_2_rating_calculator.rd
+
+        player_1_rating_calculator.update_player(
+            [player_2_old_rating],
+            [player_2_old_rating_deviation],
+            [game_result_player_1]
+        )
+
+        player_2_rating_calculator.update_player(
+            [player_1_old_rating],
+            [player_1_old_rating_deviation],
+            [game_result_player_2]
+        )
+
+        player_1_rating_change = player_1_rating_calculator.rating - player_1_old_rating
+        player_2_rating_change = player_2_rating_calculator.rating - player_2_old_rating
+
+
+        newGame.date_time = timezone.now()
+
+        newGame.player_1 = player_1
+        newGame.player_2 = player_2
+        newGame.referee = referee
+
+        newGame.player_1_rating = player_1_old_rating
+        newGame.player_2_rating = player_2_old_rating
+
+        if form.cleaned_data["ranked"]:
+            newGame.player_1_rating_change = player_1_rating_change
+            newGame.player_2_rating_change = player_2_rating_change
+
+            newGame.ranked = True
+
+        else:
+            newGame.player_1_rating_change = 0
+            newGame.player_2_rating_change = 0
+
+            newGame.ranked = False
+
+        newGame.game_result = form.cleaned_data["game_result"]
+
+        newGame.save()
+
+
+        if form.cleaned_data["ranked"]:
+            player_1.rating.rating = player_1_rating_calculator.rating
+            player_1.rating.rating_deviation = player_1_rating_calculator.rd
+            player_1.rating.rating_volatility = player_1_rating_calculator.vol
+            player_1.rating.save()
+            # player_1.save()
+
+            player_2.rating.rating = player_2_rating_calculator.rating
+            player_2.rating.rating_deviation = player_2_rating_calculator.rd
+            player_2.rating.rating_volatility = player_2_rating_calculator.vol
+            player_2.rating.save()
+            # player_2.save()
+
+
+        return super().form_valid(form)
     
-    if request.POST["game_result"] == "1":
-        game_result_player_1 = 1
-        game_result_player_2 = 0
-    elif request.POST["game_result"] == "2":
-        game_result_player_1 = 0
-        game_result_player_2 = 1
-    elif request.POST["game_result"] == "3":
-        game_result_player_1 = 0.5
-        game_result_player_2 = 0.5
-
-    player_1_rating_calculator = utils.Player()
-    player_1_rating_calculator.rating = player_1.rating.rating
-    player_1_rating_calculator.rd = player_1.rating.rating_deviation
-    player_1_rating_calculator.vol = player_1.rating.rating_volatility
-    
-    player_2_rating_calculator = utils.Player()
-    player_2_rating_calculator.rating = player_2.rating.rating
-    player_2_rating_calculator.rd = player_2.rating.rating_deviation
-    player_2_rating_calculator.vol = player_2.rating.rating_volatility
-
-    player_1_old_rating = player_1_rating_calculator.rating
-    player_2_old_rating = player_2_rating_calculator.rating
-
-    player_1_old_rating_deviation = player_1_rating_calculator.rd
-    player_2_old_rating_deviation = player_2_rating_calculator.rd
-
-    player_1_rating_calculator.update_player(
-        [player_2_old_rating],
-        [player_2_old_rating_deviation],
-        [game_result_player_1]
-    )
-
-    player_2_rating_calculator.update_player(
-        [player_1_old_rating],
-        [player_1_old_rating_deviation],
-        [game_result_player_2]
-    )
-
-    player_1_rating_change = player_1_rating_calculator.rating - player_1_old_rating
-    player_2_rating_change = player_2_rating_calculator.rating - player_2_old_rating
-
-
-    newGame.date_time = timezone.now()
-
-    newGame.player_1 = player_1
-    newGame.player_2 = player_2
-    newGame.referee = referee
-
-    newGame.player_1_rating = player_1_old_rating
-    newGame.player_2_rating = player_2_old_rating
-
-    if request.POST["ranked"] == "yes":
-        newGame.player_1_rating_change = player_1_rating_change
-        newGame.player_2_rating_change = player_2_rating_change
-
-        newGame.ranked = True
-
-    else:
-        newGame.player_1_rating_change = 0
-        newGame.player_2_rating_change = 0
-
-        newGame.ranked = False
-
-    newGame.game_result = request.POST["game_result"]
-
-    newGame.save()
-
-
-    if request.POST["ranked"] == "yes":
-        player_1.rating.rating = player_1_rating_calculator.rating
-        player_1.rating.rating_deviation = player_1_rating_calculator.rd
-        player_1.rating.rating_volatility = player_1_rating_calculator.vol
-        player_1.rating.save()
-        # player_1.save()
-
-        player_2.rating.rating = player_2_rating_calculator.rating
-        player_2.rating.rating_deviation = player_2_rating_calculator.rd
-        player_2.rating.rating_volatility = player_2_rating_calculator.vol
-        player_2.rating.save()
-        # player_2.save()
-
-    return HttpResponseRedirect(reverse("registry:view"))
 
     
 class PlayerDetailView(PermissionRequiredMixin, generic.DetailView):

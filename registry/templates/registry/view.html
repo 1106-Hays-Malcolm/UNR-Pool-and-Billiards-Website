@@ -5,7 +5,7 @@
 {% block content %}
 <h2>Game Registry</h2>
 
-<a href="{% url "registry:game_add_form" %}">Add a New Game</a>
+<a href="{% url "registry:add_game" %}">Add a New Game</a>
 
 <hr>
 {% for game in game_list %}
