@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block title %}Add Game{% endblock %}
+
+{% block content %}
+<h2>Add Game to Registry</h2>
+
+<form action="{% url "registry:add_game" %}" method="post">
+    {% csrf_token %}
+
+    <label for="player_1">Select Player 1:</label>
+    <select name="player_1" id="player_1">
+        {% for player in players %}
+        <option value="{{ player.id }}">{{ player.first_name }} {{ player.last_name }}</option>
+        {% endfor %}
+    </select>
+
+    <br>
+
+    <label for="player_2">Select Player 2:</label>
+    <select name="player_2" id="player_2">
+        {% for player in players %}
+        <option value="{{ player.id }}">{{ player.first_name }} {{ player.last_name }}</option>
+        {% endfor %}
+    </select>
+
+    <p>Game Result:</p>
+
+    <label for="1">Player 1 Wins</label>
+    <input type="radio" name="game_result" id="1" value="1">
+    <br>
+
+    <label for="2">Player 2 Wins</label>
+    <input type="radio" name="game_result" id="2" value="2">
+    <br>
+
+    <label for="3">Draw / Tie</label>
+    <input type="radio" name="game_result" id="3" value="3">
+    <br><br>
+
+    <label for="">Ranked Game?</label>
+    <input type="checkbox" id="ranked" name="ranked" value="yes" checked>
+    <br><br>
+
+    <input type="submit" value="Submit">
+
+</form>
+
+{% endblock %}

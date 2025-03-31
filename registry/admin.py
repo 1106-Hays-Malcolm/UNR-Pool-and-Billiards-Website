@@ -1,5 +1,6 @@
 from django.contrib import admin
 from .models import Game
+from .models import Rating
 
 class GameAdmin(admin.ModelAdmin):
     fieldsets = [
@@ -17,4 +18,15 @@ class GameAdmin(admin.ModelAdmin):
     list_filter = ["date_time"]
     search_fields = []
 
+class RatingAdmin(admin.ModelAdmin):
+    fieldsets = [
+        ("Player", {"fields": ["player"]}),
+        ("Rating", {"fields": ["rating"]}),
+        ("Rating Deviation", {"fields": ["rating_deviation"]}),
+        ("Rating Volatility", {"fields": ["rating_volatility"]}),
+    ]
+
+    list_display = ["player", "rating"]
+
 admin.site.register(Game, GameAdmin)
+admin.site.register(Rating, RatingAdmin)

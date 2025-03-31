@@ -24,6 +24,7 @@ OTHER DEALINGS IN THE SOFTWARE.
 """
 
 import math
+from .models import Rating
 
 class Player:
     # Class attribute
@@ -161,3 +162,9 @@ class Player:
         
         """
         self._preRatingRD()
+
+def give_user_rating_if_no_rating(user):
+    if not hasattr(user, "rating"):
+        newRating = Rating()
+        newRating.player = user
+        newRating.save()

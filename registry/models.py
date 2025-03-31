@@ -11,7 +11,7 @@ class Game(models.Model):
     player_2 = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name="player_2_games_set")
 
     # If ranked is True, the players' ratings will change after a game
-    ranked = models.BooleanField(default=False)
+    ranked = models.BooleanField(default=True)
 
     # player_1_rating and player_2_rating are the ratings of the players just before the game was played
     player_1_rating = models.IntegerField()
@@ -31,6 +31,8 @@ class Game(models.Model):
     game_result = models.IntegerField(choices=PossibleGameResults)
 
 class Rating(models.Model):
-    rating = models.IntegerField()
-    rating_deviation = models.FloatField()
-    rating_volatility = models.FloatField()
+    player = models.OneToOneField(CustomUser, on_delete=models.CASCADE, primary_key=True, default=None)
+
+    rating = models.IntegerField(default=1500)
+    rating_deviation = models.FloatField(default=350)
+    rating_volatility = models.FloatField(default=0.06)
