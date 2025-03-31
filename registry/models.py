@@ -30,9 +30,20 @@ class Game(models.Model):
 
     game_result = models.IntegerField(choices=PossibleGameResults)
 
+    class Meta:
+        permissions = [
+            ("can_view_others_games", "Can view the games of other players. This permission is required to view the registry."),
+            ("can_add_games", "Can add new games to the registry."),
+        ]
+
 class Rating(models.Model):
     player = models.OneToOneField(CustomUser, on_delete=models.CASCADE, primary_key=True, default=None)
 
     rating = models.IntegerField(default=1500)
     rating_deviation = models.FloatField(default=350)
     rating_volatility = models.FloatField(default=0.06)
+
+    class Meta:
+        permissions = [
+            ("can_view_others_ratings", "Can view the ratings of other players.")
+        ]
