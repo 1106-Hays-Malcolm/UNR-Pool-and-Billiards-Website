@@ -13,7 +13,7 @@ class CustomUserAdmin(UserAdmin):
         ("Email Address", {"fields": ["email"]}),
         ("First Name", {"fields": ["first_name"]}),
         ("Last Name", {"fields": ["last_name"]}),
-        ("Rating", {"fields": ["rating.rating"]}),
+        ("Groups", {"fields": ["groups"]})
     ]
     list_display = [
         "email",

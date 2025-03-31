@@ -45,5 +45,5 @@ class Rating(models.Model):
 
     class Meta:
         permissions = [
-            ("can_view_others_ratings", "Can view the ratings of other players.")
+            ("can_view_others_ratings", "Can view the ratings of other players. This permission is required to view the registry.")
         ]
