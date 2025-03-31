@@ -8,6 +8,8 @@
 {% if user.is_authenticated %}
 Hi, {{ user.first_name }} {{ user.last_name }}!
 
+<p><a href="{% url 'registry:view' %}">View Registry</a></p>
+
 <p><a href="{% url 'accounts:password_change' %}">Change Password</a></p>
 
 <form action="{% url 'accounts:logout' %}" method="post">
@@ -19,7 +21,6 @@ Hi, {{ user.first_name }} {{ user.last_name }}!
 <p>You are not logged in</p>
 <p><a href="{% url 'accounts:login' %}">Log In</a></p>
 <p><a href="{% url 'accounts:signup' %}">Create an Account</a></p>
-<p><a href="{% url 'registry:view' %}">View Registry</a> (You must have an account)</p>
 {% endif %}
 
 {% endblock %}
