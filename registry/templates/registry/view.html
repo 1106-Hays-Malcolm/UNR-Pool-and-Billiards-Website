@@ -3,29 +3,67 @@
 {% block title %}View Registry{% endblock %}
 
 {% block content %}
-<h2>Game Registry</h2>
+<h1>Game Registry</h1>
 
-<a href="{% url "registry:add_game" %}">Add a New Game</a>
+<div class="add-game-button-wrapper"><a href="{% url "registry:add_game" %}" class="add-game-button">Add a New Game</a></div>
 
-<hr>
 {% for game in game_list %}
-<p>
-    <a href="{% url "registry:detail" game.player_1.id %}">{{ game.player_1.first_name }} {{ game.player_1.last_name }}</a> ({{ game.player_1_rating }} 
-        {% if game.player_1_rating_change >= 0 %}<span style="color: green">+{% else %}<span style="color: red">{% endif %}{{ game.player_1_rating_change }}</span>) vs. 
+<div class="game-wrapper">
+    <div class="registry-player-names">
 
-    <a href="{% url "registry:detail" game.player_2.id %}">{{ game.player_2.first_name }} {{ game.player_2.last_name }}</a> ({{ game.player_2_rating }} 
-    {% if game.player_2_rating_change >= 0 %}<span style="color: green">+{% else %}<span style="color: red">{% endif %}{{ game.player_2_rating_change }}</span>)
-</p>
+        <span class="registry-name-and-rating-wrapper">
+            <a href="{% url "registry:detail" game.player_1.id %}">
+                {{ game.player_1.first_name }} {{ game.player_1.last_name }}
+            </a>
 
-<p>Referee: <a href="{% url "registry:detail" game.referee.id %}">{{ game.referee.first_name }} {{ game.referee.last_name }}</a></p>
+            <span>
+                ({{ game.player_1_rating }}
+                {% if game.player_1_rating_change >= 0 %}
+                <span style="color: green">+
+                {% else %}
+                <span style="color: red">
+                {% endif %}
+                {{ game.player_1_rating_change }}</span>)
+            </span>
 
-<p>Game result: 
-    {% if game.game_result == 1 %}{{ game.player_1.first_name }} {{ game.player_1.last_name }} (Player 1) Wins
-    {% elif game.game_result == 2 %}{{ game.player_2.first_name }} {{ game.player_2.last_name }} (Player 2) Wins
-    {% elif game.game_result == 3 %}Draw
-    {% endif %}
-</p>
-<hr>
+        </span>
+        
+        <span class="registry-name-and-rating-wrapper" style="justify-content: center">vs.</span>
+
+        <span class="registry-name-and-rating-wrapper" style="justify-content: right">
+            <a href="{% url "registry:detail" game.player_2.id %}">
+                {{ game.player_2.first_name }} {{ game.player_2.last_name }}
+            </a>
+
+            <span>
+                ({{ game.player_2_rating }}
+                {% if game.player_2_rating_change >= 0 %}
+                <span style="color: green">+
+                {% else %}<span style="color: red">
+                {% endif %}
+                {{ game.player_2_rating_change }}</span>)
+            </span>
+
+        </span>
+    </div>
+
+    <div class="registry-referee-and-game-result-wrapper">
+        <div class="registry-refreee-and-game-result registry-referee"><span>Referee:</span> <span><a href="{% url "registry:detail" game.referee.id %}">{{ game.referee.first_name }} {{ game.referee.last_name }}</a></span></div>
+
+        <div class="registry-referee-and-game-result-divider"></div>
+
+        <span class="registry-refreee-and-game-result">
+            <span>Game result:</span>
+            <span>
+                {% if game.game_result == 1 %}{{ game.player_1.first_name }} {{ game.player_1.last_name }} (Player 1) Wins
+                {% elif game.game_result == 2 %}{{ game.player_2.first_name }} {{ game.player_2.last_name }} (Player 2) Wins
+                {% elif game.game_result == 3 %}Draw
+                {% endif %}
+            </span>
+        </span>
+    </div>
+</div>
 {% endfor %}
+
 
 {% endblock %}

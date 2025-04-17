@@ -3,15 +3,18 @@
 {% block title %}Add Game{% endblock %}
 
 {% block content %}
-<h2>Add Game to Registry</h2>
 
-<form action="{% url "registry:add_game" %}" method="post">
-    {% csrf_token %}
+<div class="form-wrapper">
+    <h1>Add Game to Registry</h1>
 
-    {{ form }}
+    <form action="{% url "registry:add_game" %}" method="post">
+        {% csrf_token %}
 
-    <input type="submit" value="Submit">
+        {{ form }}
 
-</form>
+        <input type="submit" value="Submit">
+
+    </form>
+</div>
 
 {% endblock %}

@@ -17,7 +17,7 @@
     <div class="wrapper">
 
         <header class="navbar">
-            <a href="{% url "home" %}"><img src="{% static "images/logo.svg" %}" class="logo"></a>
+            <a href="{% url "home" %}" class="logo-wrapper"><img src="{% static "images/logo.svg" %}" class="logo"></a>
             <nav class="navbar-links">
                 <ul>
                     {% if not user.is_authenticated %}
