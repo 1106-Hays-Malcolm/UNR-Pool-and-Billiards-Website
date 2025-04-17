@@ -1,15 +1,28 @@
 .wrapper {
-    max-width: 1200px;
-    margin: auto;
+    max-width: 1000px;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: #ffffff;
+    min-block-size: 100%;
+    padding: 0 30px;
     /* border: dotted black 5px; */
 }
 
+body {
+    background-color: #8ee3ef;
+    block-size: 100%;
+    margin: 0;
+}
+
+html {
+    block-size: 100%;
+}
 
 .navbar {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    border-bottom: black 3px solid;
+    border-bottom: #201e1f 3px solid;
     padding: 10px;
     /* border: 2px black dotted; */
 }
@@ -40,7 +53,7 @@
 
 a,
 .link-style {
-    color: blue;
+    color: #ff4000;
     text-decoration: none;
     padding: 0;
     margin: 0;
@@ -54,16 +67,20 @@ a:hover,
 .link-style:hover {
     text-decoration: underline;
     cursor: pointer;
+    color: #ff7b4f;
+    transition: color 0.5s;
 }
 
 h1 {
     text-align: center;
     font-size: 4rem;
+    color: #201e1f;
 }
 
 .two-column-layout {
     display: grid;
     grid-template-columns: 1fr;
+    gap: 15px;
 
     @media (width > 800px) {
         grid-template-columns: 1fr 1fr;
@@ -71,6 +88,84 @@ h1 {
 }
 
 img {
-    max-width: 100%;
-    max-height: auto;
+    max-inline-size: 100%;
+    display: block;
+    border-radius: 15px;
+}
+
+p {
+    font-size: 1.1rem;
+}
+
+.form-wrapper {
+    /* background-color: #88958D; */
+    border: #201e1f 2px solid;
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+    max-inline-size: 800px;
+    padding: 15px;
+    border-radius: 20px;
+    margin-top: 20px;
+    align-items: center;
+}
+
+.form-wrapper h1 {
+    margin: 0 0 25px 0;
+}
+
+form {
+    display: flex;
+    align-items: left;
+    flex-direction: column;
+    gap: 20px;
+    color: #201e1f;
+}
+
+form input {
+    block-size: 1.5rem;
+    /* border: 2px #201e1f solid; */
+    border: none;
+    background-color: #201e1f20;
+    border-radius: 5px;
+    transition: background-color 0.5s;
+}
+
+form input:hover {
+    background-color: #201e1f30;
+    transition: background-color 0.5s;
+}
+
+form input:focus {
+    background-color: #201e1f40;
+    transition: background-color 0.5s;
+    outline: none;
+}
+
+form button[type="submit"] {
+    background-color: transparent;
+    border: none;
+    font-size: 1.3rem;
+    border-radius: 5px;
+    color: #ff4000;
+    padding: 8px;
+    font-weight: bold;
+}
+
+form label {
+    color: #ff4000;
+    font-weight: bold;
+    margin-right: 10px;
+}
+
+form button[type="submit"]:hover {
+    background-color: #00000030;
+    transition: background-color 0.5s;
+    align-self: center;
+}
+
+form ul {
+    list-style: none;
+    color: #ff4000;
+    font-size: 0.9rem;
 }
