@@ -156,12 +156,14 @@ form input:focus {
 
 form button[type="submit"]:not(.link-style) {
     background-color: transparent;
+    transition: background-color 0.5s;
     border: none;
     font-size: 1.3rem;
     border-radius: 5px;
     color: #ff4000;
     padding: 8px;
     font-weight: bold;
+    align-self: center;
 }
 
 form label {
@@ -173,13 +175,30 @@ form label {
 form button[type="submit"]:hover:not(.link-style) {
     background-color: #00000030;
     transition: background-color 0.5s;
-    align-self: center;
 }
 
 form ul {
     list-style: none;
     color: #ff4000;
     font-size: 0.9rem;
+}
+
+form select {
+    background-color: #201e1f20;
+    border: none;
+    transition: background-color 0.5s;
+    block-size: 1.5rem;
+    border-radius: 5px;
+}
+
+form select:hover {
+    background-color: #201e1f30;
+    transition: background-color 0.5s;
+}
+
+form select:focus {
+    background-color: #201e1f40;
+    transition: background-color 0.5s;
 }
 
 /* .one-column-layout-centered {
