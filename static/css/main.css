@@ -24,6 +24,7 @@ html {
     justify-content: space-between;
     border-bottom: #201e1f 3px solid;
     padding: 10px;
+    gap: 20px;
     /* border: 2px black dotted; */
 }
 
@@ -36,6 +37,7 @@ html {
     display: flex;
     gap: 20px;
     flex-direction: row;
+    flex-wrap: wrap;
     justify-content: center;
     padding: 0;
     margin: auto;
@@ -124,6 +126,11 @@ p {
 
 .form-wrapper h1 {
     margin: 0 0 25px 0;
+    font-size: 3rem;
+
+    @media (width > 800px) {
+        font-size: 4rem;
+    }
 }
 
 form {
