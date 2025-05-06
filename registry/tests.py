@@ -20,4 +20,9 @@ class AddGameFormTest(TestCase):
         form = AddGameForm(data={'player_1': self.player1.pk, 'player_2': self.player2.pk, 'game_result': '1', 'ranked': True})
 
         self.assertTrue(form.is_valid())
+
+    def test_add_game_same_players(self):
+        form = AddGameForm(data={'player_1': self.player1.pk, 'player_2': self.player1.pk, 'game_result': '1', 'ranked': True})
+
+        self.assertFalse(form.is_valid())
         

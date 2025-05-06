@@ -1,5 +1,6 @@
 .venv
 .vscode
 .coverage
+.env
 db.sqlite3
 **/__pycache__
