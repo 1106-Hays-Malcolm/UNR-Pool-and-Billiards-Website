@@ -15,6 +15,7 @@ from .forms import AddGameForm
 
 class ViewGamesView(PermissionRequiredMixin, generic.ListView):
     permission_required = ["registry.can_view_others_games", "registry.can_view_others_ratings"]
+    raise_exception = True
 
     template_name = "registry/view.html"
     context_object_name = "game_list"
@@ -26,6 +27,7 @@ class ViewGamesView(PermissionRequiredMixin, generic.ListView):
 
 class GameAddFormView(PermissionRequiredMixin, generic.FormView):
     permission_required = ["registry.can_view_others_games", "registry.can_add_games", "registry.can_view_others_ratings"]
+    raise_exception = True
 
     template_name = "registry/add_game_form.html"
     form_class = AddGameForm
@@ -130,6 +132,7 @@ class GameAddFormView(PermissionRequiredMixin, generic.FormView):
     
 class PlayerDetailView(PermissionRequiredMixin, generic.DetailView):
     permission_required = ["registry.can_view_others_ratings"]
+    raise_exception = True
 
     template_name = "registry/detail.html"
     context_object_name = "player"
@@ -150,22 +153,3 @@ class PlayerDetailView(PermissionRequiredMixin, generic.DetailView):
 
         return context
     
-
-    # def get_context_data(self, player_id):
-    #     player = CustomUser.objects.get(pk=player_id)
-    #     utils.give_user_rating_if_no_rating(player)
-
-    #     player_info = {}
-
-    #     player_info["first_name"] = player.first_name
-    #     player_info["last_name"] = player.last_name
-    #     player_info["email"] = player.email
-    #     player_info["rating"] = player.rating.rating
-    #     player_info["rating_deviation"] = round(player.rating.rating_deviation)
-    #     player_info["confidence_interval_max"] = player_info["rating"] + (2 * player_info["rating_deviation"])
-    #     player_info["confidence_interval_min"] = player_info["rating"] - (2 * player_info["rating_deviation"])
-
-    #     if player_info["confidence_interval_min"] < 0:
-    #         player_info["confidence_interval_min"] = 0
-
-    #     return player_info
