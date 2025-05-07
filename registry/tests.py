@@ -6,7 +6,7 @@ from registry.forms import AddGameForm
 from django.contrib.auth.models import Group
 from registry.management.commands.create_groups import Command
 
-
+# My tests
 class AddGameFormTest(TestCase):
     def setUp(self):
         self.player1 = CustomUser(email="player1@test.com", first_name="Player", last_name="One", password="password1357")
