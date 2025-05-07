@@ -1,6 +1,7 @@
 from django.db import models
 from accounts.models import CustomUser
 
+# The model for storing games
 class Game(models.Model):
 
     date_time = models.DateTimeField("date and time of game")
