@@ -2,10 +2,8 @@ from django.test import TestCase
 from django.urls import reverse
 from registry.models import Game
 from accounts.models import CustomUser
-from django.utils import timezone
 from registry.forms import AddGameForm
-import datetime
-from django.contrib.auth.models import Permission, Group
+from django.contrib.auth.models import Group
 from registry.management.commands.create_groups import Command
 
 
