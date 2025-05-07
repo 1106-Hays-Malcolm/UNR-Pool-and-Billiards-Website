@@ -59,7 +59,6 @@ class GameAddFormViewTest(TestCase):
     def test_access_add_game_form_view_logged_in_with_proper_permissions(self):
         officerGroup = Group.objects.get(name="Officers")
         self.player1.groups.add(officerGroup)
-
         self.client.login(email="player1@test.com", password="password1357")
 
         response = self.client.get(reverse("registry:add_game"))
@@ -72,3 +71,32 @@ class GameAddFormViewTest(TestCase):
         response = self.client.post(reverse("registry:add_game"), {"player_1": self.player2.pk, "player_2": self.player3, "game_result": 2, "ranked": True})
 
         self.assertEqual(response.status_code, 403)
+
+    def test_add_game_post_request_logged_in_with_proper_permissions_is_successful(self):
+        officerGroup = Group.objects.get(name="Officers")
+        self.player1.groups.add(officerGroup)
+        self.client.login(email="player1@test.com", password="password1357")
+
+        response = self.client.post(reverse("registry:add_game"), {"player_1": self.player2.pk, "player_2": self.player3, "game_result": 2, "ranked": True})
+
+        self.assertEqual(response.status_code, 200)
+
+    def test_add_game_post_request_logged_in_with_proper_permissions_adds_game_to_database(self):
+        officerGroup = Group.objects.get(name="Officers")
+        self.player1.groups.add(officerGroup)
+        self.client.login(email="player1@test.com", password="password1357")
+
+        response = self.client.post(reverse("registry:add_game"), data={"player_1": self.player2.pk, "player_2": self.player3.pk, "game_result": 2, "ranked": True})
+
+        self.assertRedirects(response, reverse("registry:view"))
+
+        games = Game.objects.all()
+        self.assertEqual(len(games), 1)
+
+        game = games[0]
+
+        self.assertEqual(game.player_1, self.player2)
+        self.assertEqual(game.player_2, self.player3)
+        self.assertEqual(game.referee, self.player1)
+        self.assertEqual(game.ranked, True)
+        self.assertEqual(game.game_result, 2)
