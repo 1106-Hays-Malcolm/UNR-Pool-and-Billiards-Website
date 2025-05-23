@@ -4,4 +4,8 @@
 
 {% block content %}
 
+{% for captain in captain_list %}
+
+<p>{% captain.first_name %} {% captain.last_name %}</p>
+
 {% endblock %}
