@@ -19,6 +19,6 @@ class ListCaptainsView(ListView):
 
     def get_queryset(self):
         captain_group = Group.objects.get(name="Officers")
-        captain_list = CustomUser.objects.get(groups=captain_group)
+        captain_list = CustomUser.objects.filter(groups=captain_group)
 
         return captain_list
