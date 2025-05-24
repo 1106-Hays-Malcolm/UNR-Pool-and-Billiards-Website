@@ -214,13 +214,23 @@ form select:focus {
     align-items: center;
 } */
 
-.game-wrapper {
+.game-wrapper, .officer-wrapper {
     border: #201e1f 2px solid;
     /* padding: 10px; */
     border-radius: 10px;
     max-inline-size: 800px;
     margin: auto;
     margin-bottom: 20px;
+}
+
+.officer-name-not-bottom {
+    border-bottom: #201e1f 2px solid;
+}
+
+.officer-name-bottom, .officer-name-not-bottom {
+    padding: 10px;
+    margin: 0;
+    text-align: center;
 }
 
 .add-game-button-wrapper {

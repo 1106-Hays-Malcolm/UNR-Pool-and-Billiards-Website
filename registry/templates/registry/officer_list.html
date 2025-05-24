@@ -6,8 +6,18 @@
 
 <h1>Officer List</h1>
 
-{% for officer in officer_list %}
-<p>{{ officer.first_name }} {{ officer.last_name }}</p>
-{% endfor %}
+<div class="officer-wrapper">
+    {% for officer in officer_list %}
+
+        {% if forloop.counter != officer_list.count %}
+        <div class="officer-name-not-bottom">
+
+        {% else %}
+        <div class="officer-name-bottom">
+        {% endif %}
+
+        <a href="{% url 'registry:detail' officer.id %}">{{ officer.first_name }} {{ officer.last_name }}</a></div>
+    {% endfor %}
+</div>
 
 {% endblock %}
