@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 from pathlib import Path
 import os
+from warnings import warn
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -27,9 +28,15 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get("SECRET_KEY", default='django-insecure-*$=x00ahgd9*ss1=s9-i=wsxqz5n8&q^kjsp3*uyzlcr!ak$8r')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-# DEBUG = True
 
 DEBUG = bool(os.environ.get("DEBUG", default=0))
+
+if os.environ.get("DEBUG") is None:
+    print("The DEBUG enviroment variable is not set! Debug mode is turned off by default.\nIf debug mode is off, static files will not be loaded by the Django devleopment server.")
+elif DEBUG:
+    print("Debug mode is turned on! This is okay for testing, but do not use it in production.")
+elif not DEBUG:
+    print("Debug mode is off. This is the correct setting for production, but if Django's development server is not loading the static files, this is probably the reason.")
 
 # ALLOWED_HOSTS = ['*']
 
