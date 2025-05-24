@@ -11,6 +11,7 @@ from django.http import HttpResponseRedirect, Http404
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.contrib.auth.decorators import login_required, permission_required
 from .forms import AddGameForm
+from django.contrib.auth.models import Group
 
 
 class ViewGamesView(PermissionRequiredMixin, generic.ListView):
@@ -153,3 +154,13 @@ class PlayerDetailView(PermissionRequiredMixin, generic.DetailView):
 
         return context
     
+
+class ListCaptainsView(generic.ListView):
+    template_name = "registry/captain_list.html"
+    context_object_name = "captain_list"
+
+    def get_queryset(self):
+        captain_group = Group.objects.get(name="Officers")
+        captain_list = CustomUser.objects.filter(groups=captain_group)
+
+        return captain_list
