@@ -20,8 +20,12 @@
             <a href="{% url "home" %}" class="logo-wrapper"><img src="{% static "images/logo.svg" %}" class="logo"></a>
             <nav class="navbar-links">
                 <ul>
+                    {% if perms.accounts.can_view_officers_list %}
+                    <li><a href="{% url 'registry:officer_list' %}">Officers</a></li>
+                    {% endif %}
+
                     {% if perms.registry.can_view_others_games and perms.registry.can_view_others_ratings %}
-                    <li><a href="{% url 'registry:view' %}">Registry</a></li>
+                    <li><a href="{% url 'registry:view' %}">Game Registry</a></li>
                     {% endif %}
                     
                     {% if not user.is_authenticated %}
