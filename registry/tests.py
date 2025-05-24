@@ -5,7 +5,7 @@ from accounts.models import CustomUser
 from registry.forms import AddGameForm
 from django.contrib.auth.models import Group
 from registry.management.commands.create_groups import Command
-from registry.views import ListCaptainsView
+from registry.views import ListOfficersView
 
 # My tests
 class AddGameFormTest(TestCase):
@@ -27,6 +27,8 @@ class AddGameFormTest(TestCase):
 
         self.assertFalse(form.is_valid())
         
+
+
 class GameAddFormViewTest(TestCase):
     def setUp(self):
         self.player1 = CustomUser(email="player1@test.com", first_name="Player", last_name="One")
@@ -100,38 +102,61 @@ class GameAddFormViewTest(TestCase):
         self.assertEqual(game.ranked, True)
         self.assertEqual(game.game_result, 2)
 
-class ListCaptainsViewTests(TestCase):
+class ListOfficerViewTests(TestCase):
     def setUp(self):
         # Create the groups
         command = Command()
         command.handle()
 
-        captain_group = Group.objects.get(name="Officers")
+        self.officer = CustomUser(email="player1@test.com", first_name="Player", last_name="One")
+        self.officer.set_password("password1357")
 
-        self.captain = CustomUser(email="player1@test.com", first_name="Player", last_name="One", password="password1357")
-        self.normal_user = CustomUser(email="player2@test.com", first_name="Player", last_name="Two", password="password1357")
+        self.normal_user = CustomUser(email="player2@test.com", first_name="Player", last_name="Two")
+        self.normal_user.set_password("password1357")
+        
+        self.captain = CustomUser(email="player3@test.com", first_name="Player", last_name="Three")
+        self.captain.set_password("password1357")
 
-        self.captain.save()
+        self.officer.save()
         self.normal_user.save()
+        self.captain.save()
 
+        officer_group = Group.objects.get(name="Officers")
+        captain_group = Group.objects.get(name="Captains")
+
+        self.officer.groups.add(officer_group)
         self.captain.groups.add(captain_group)
 
-    def test_captain_list_view_status_code(self):
-        response = self.client.get(reverse("registry:captain_list"))
+    def test_officer_list_view_status_code_not_signed_in(self):
+        response = self.client.get(reverse("registry:officer_list"))
+
+        self.assertEqual(response.status_code, 403)
+
+    def test_officer_list_view_status_code_signed_in_without_proper_permissions(self):
+        # Log in as a normal user without permissions
+        self.client.login(email="player2@test.com", password="password1357")
+        response = self.client.get(reverse("registry:officer_list"))
+
+        self.assertEqual(response.status_code, 403)
+
+    def test_officer_list_view_status_code_signed_in_with_proper_permissions(self):
+        # Log in as a captain
+        self.client.login(email="player3@test.com", password="password1357")
+        response = self.client.get(reverse("registry:officer_list"))
 
         self.assertEqual(response.status_code, 200)
 
-    def test_captain_list_view_get_list_of_captains(self):
-        captain_list_view = ListCaptainsView()
-        captain_list = captain_list_view.get_queryset()
+    def test_officer_list_view_get_list_of_officers(self):
+        officer_list_view = ListOfficersView()
+        officer_list = officer_list_view.get_queryset()
 
-        self.assertEqual(len(captain_list), 1)
-        self.assertEqual(captain_list[0], self.captain)
+        self.assertEqual(len(officer_list), 1)
+        self.assertEqual(officer_list[0], self.officer)
 
-    def test_captain_list_view_get_list_of_captains_with_no_captains(self):
-        self.captain.delete()
+    def test_officer_list_view_get_list_of_officers_with_no_officers(self):
+        self.officer.delete()
 
-        captain_list_view = ListCaptainsView()
-        captain_list = captain_list_view.get_queryset()
+        officer_list_view = ListOfficersView()
+        officer_list = officer_list_view.get_queryset()
 
-        self.assertEqual(len(captain_list), 0)
+        self.assertEqual(len(officer_list), 0)

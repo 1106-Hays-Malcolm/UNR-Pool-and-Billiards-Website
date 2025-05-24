@@ -6,9 +6,16 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
 
-        new_group, created = Group.objects.get_or_create(name='Officers')
+        officer_group, created = Group.objects.get_or_create(name='Officers')
+        captain_group, created = Group.objects.get_or_create(name='Captains')
+
         officerPermissionNames = ["can_view_others_games", "can_add_games", "can_view_others_ratings"]
+        captainPermissionNames = ["can_view_officers_list", "can_manage_officer_status"]
 
         for name in officerPermissionNames:
             permission = Permission.objects.get(codename=name)
-            new_group.permissions.add(permission)
+            officer_group.permissions.add(permission)
+
+        for name in captainPermissionNames:
+            permission = Permission.objects.get(codename=name)
+            captain_group.permissions.add(permission)

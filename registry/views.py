@@ -155,12 +155,15 @@ class PlayerDetailView(PermissionRequiredMixin, generic.DetailView):
         return context
     
 
-class ListCaptainsView(generic.ListView):
-    template_name = "registry/captain_list.html"
-    context_object_name = "captain_list"
+class ListOfficersView(PermissionRequiredMixin, generic.ListView):
+    permission_required = ["accounts.can_view_officers_list"]
+    raise_exception = True
+
+    template_name = "registry/officer_list.html"
+    context_object_name = "officer_list"
 
     def get_queryset(self):
-        captain_group = Group.objects.get(name="Officers")
-        captain_list = CustomUser.objects.filter(groups=captain_group)
+        officer_group = Group.objects.get(name="Officers")
+        officer_list = CustomUser.objects.filter(groups=officer_group)
 
-        return captain_list
+        return officer_list

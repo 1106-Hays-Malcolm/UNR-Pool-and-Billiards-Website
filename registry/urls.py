@@ -2,7 +2,7 @@ from django.urls import path
 from .views import ViewGamesView
 from .views import GameAddFormView
 from .views import PlayerDetailView
-from .views import ListCaptainsView
+from .views import ListOfficersView
 
 app_name = "registry"
 urlpatterns = [
@@ -10,5 +10,5 @@ urlpatterns = [
     path("add_game/", GameAddFormView.as_view(), name="add_game"),
     # path("add_game/", add_game, name="add_game"),
     path("detail/<int:pk>", PlayerDetailView.as_view(), name="detail"),
-    path("captain_list", ListCaptainsView.as_view(), name="captain_list"),
+    path("officer_list", ListOfficersView.as_view(), name="officer_list"),
 ]

@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block title %}View All Officers{% endblock %}
+
+{% block content %}
+
+<h1>Officer List</h1>
+
+{% for officer in officer_list %}
+<p>{{ officer.first_name }} {{ officer.last_name }}</p>
+{% endfor %}
+
+{% endblock %}

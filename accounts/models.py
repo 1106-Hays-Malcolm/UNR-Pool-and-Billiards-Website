@@ -61,3 +61,9 @@ class CustomUser(AbstractUser):
 
     def __str__(self):
         return self.first_name + " " + self.last_name
+
+    class Meta:
+        permissions = [
+            ("can_view_officers_list", "Can view the list of officer. Captains should have this permission."),
+            ("can_manage_officer_status", "Can give or revoke the officer status from users. Captains should have this permission.")
+        ]
