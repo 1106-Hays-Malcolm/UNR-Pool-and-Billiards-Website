@@ -26,3 +26,16 @@ class AddGameForm(forms.Form):
         if player_1 and player_2:
             if player_1 == player_2:
                 raise forms.ValidationError(_("Player 1 and Player 2 must be different!"), code="same_players")
+
+
+class AddOfficerForm(forms.Form):
+
+    selected_user = forms.ModelChoiceField(queryset=CustomUser.objects)
+
+    def clean_selected_user(self):
+        user = self.cleaned_data["selected_user"]
+
+        if not user.has_perm("accounts.eligible_to_be_officer"):
+            raise forms.ValidationError("This user is not eligible to become an officer!")
+
+        return user

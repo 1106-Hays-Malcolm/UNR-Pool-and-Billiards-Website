@@ -11,6 +11,7 @@ from django.http import HttpResponseRedirect, Http404
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.contrib.auth.decorators import login_required, permission_required
 from .forms import AddGameForm
+from .forms import AddOfficerForm
 from django.contrib.auth.models import Group
 
 
@@ -167,3 +168,17 @@ class ListOfficersView(PermissionRequiredMixin, generic.ListView):
         officer_list = CustomUser.objects.filter(groups=officer_group)
 
         return officer_list
+
+
+class AddOfficersFormView(generic.FormView):
+    template_name = "registry/add_officer_form.html"
+    form_class = AddOfficerForm
+    success_url = reverse_lazy("registry:officer_list")
+
+    def form_valid(self, form):
+        selected_user = form.cleaned_data["selected_user"]
+        officer_group = Group.objects.get(name="Officers")
+        selected_user.groups.clear()
+        selected_user.groups.add(officer_group)
+
+        return super().form_valid(form)

@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block title %}Appoint an Officer{% endblock %}
+
+{% block content %}
+<div class="form-wrapper">
+    <h1>Appoint a New Officer</h1>
+
+    <form action="{% url 'registry:add_officer' %}" method="post">
+        {% csrf_token %}
+        {{ form }}
+
+        <button type="submit">Add Officer</button>
+    </form>
+</div>
+{% endblock %}
