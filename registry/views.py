@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.views import generic
+from django.views import View
 
 from .models import Game
 from accounts.models import CustomUser
@@ -13,6 +14,7 @@ from django.contrib.auth.decorators import login_required, permission_required
 from .forms import AddGameForm
 from .forms import AddOfficerForm
 from django.contrib.auth.models import Group
+from django.http import HttpResponse, HttpResponseRedirect
 
 
 class ViewGamesView(PermissionRequiredMixin, generic.ListView):
@@ -182,3 +184,15 @@ class AddOfficersFormView(generic.FormView):
         selected_user.groups.add(officer_group)
 
         return super().form_valid(form)
+
+class DemoteOfficerView(View):
+    def post(self, request):
+        officer = CustomUser.objects.get(id=request.POST["id"])
+
+        normal_user_group = Group.objects.get(name="Normal Users")
+
+        officer.groups.clear()
+        officer.groups.add(normal_user_group)
+
+        response = HttpResponseRedirect(reverse("registry:officer_list"))
+        return response
