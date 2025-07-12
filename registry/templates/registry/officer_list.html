@@ -6,6 +6,8 @@
 
 <h1>Officer List</h1>
 
+<div class="big-button-wrapper"><a href="{% url "registry:add_officer" %}" class="big-button">Add an Officer</a></div>
+
 <div class="officer-wrapper">
     {% for officer in officer_list %}
 

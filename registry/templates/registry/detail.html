@@ -8,5 +8,14 @@
 <p>Rating: {{ player.rating.rating }}</p>
 <p>Rating Deviation: {{ rating_deviation }}</p>
 <p>Confidence interval: [{{ confidence_interval_min }}, {{ confidence_interval_max }}]</p>
+
+<div class="big-button-wrapper">
+    <form action="{% url 'registry:demote_officer' %}" method="post">
+        {% csrf_token %}
+        <input type="hidden" name="id" value="{{ player.id }}">
+        <button type="submit">Demote Officer</button>
+    </form>
+</div>
+
 <p><a href="javascript:history.back()">Go Back</a></p>
 {% endblock %}

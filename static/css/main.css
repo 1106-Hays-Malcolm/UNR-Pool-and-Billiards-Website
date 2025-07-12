@@ -233,13 +233,13 @@ form select:focus {
     text-align: center;
 }
 
-.add-game-button-wrapper {
+.add-game-button-wrapper, .big-button-wrapper {
     margin: auto;
     text-align: center;
     margin-bottom: 25px;
 }
 
-.add-game-button {
+.add-game-button, .big-button {
     font-size: 1.5rem;
     background-color: transparent;
     transition: background-color 0.5s;
@@ -248,7 +248,7 @@ form select:focus {
     border-radius: 10px;
 }
 
-.add-game-button:hover {
+.add-game-button:hover, .big-button:hover {
     background-color: #201e1f15;
     color: #ff4000;
     text-decoration: none;
