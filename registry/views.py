@@ -172,7 +172,9 @@ class ListOfficersView(PermissionRequiredMixin, generic.ListView):
         return officer_list
 
 
-class AddOfficersFormView(generic.FormView):
+class AddOfficersFormView(PermissionRequiredMixin, generic.FormView):
+    permission_required = ["accounts.can_manage_officer_status"]
+    raise_exception = True
     template_name = "registry/add_officer_form.html"
     form_class = AddOfficerForm
     success_url = reverse_lazy("registry:officer_list")
@@ -185,7 +187,10 @@ class AddOfficersFormView(generic.FormView):
 
         return super().form_valid(form)
 
-class DemoteOfficerView(View):
+class DemoteOfficerView(PermissionRequiredMixin, View):
+    permission_required = ["accounts.can_manage_officer_status"]
+    raise_exception = True
+
     def post(self, request):
         officer = CustomUser.objects.get(id=request.POST["id"])
 
