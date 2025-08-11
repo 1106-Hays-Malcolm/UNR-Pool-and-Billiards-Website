@@ -10,8 +10,16 @@ class Command(BaseCommand):
         captain_group, created = Group.objects.get_or_create(name='Captains')
         normal_user_group, created = Group.objects.get_or_create(name='Normal Users')
 
-        officerPermissionNames = ["can_view_others_games", "can_add_games", "can_view_others_ratings"]
-        captainPermissionNames = ["can_view_officers_list", "can_manage_officer_status"]
+        officerPermissionNames = ["can_view_others_games",
+                                  "can_add_games",
+                                  "can_view_others_ratings"]
+
+        captainPermissionNames = ["can_view_officers_list",
+                                  "can_manage_officer_status",
+                                  "can_view_others_games",
+                                  "can_add_games",
+                                  "can_view_others_ratings"]
+
         normalUserPermissionNames = ["eligible_to_be_officer"]
 
         for name in officerPermissionNames:
