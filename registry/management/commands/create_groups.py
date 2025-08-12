@@ -9,6 +9,7 @@ class Command(BaseCommand):
         officer_group, created = Group.objects.get_or_create(name='Officers')
         captain_group, created = Group.objects.get_or_create(name='Captains')
         normal_user_group, created = Group.objects.get_or_create(name='Normal Users')
+        president_group, created = Group.objects.get_or_create(name='President')
 
         officerPermissionNames = ["can_view_others_games",
                                   "can_add_games",
@@ -19,6 +20,12 @@ class Command(BaseCommand):
                                   "can_view_others_games",
                                   "can_add_games",
                                   "can_view_others_ratings"]
+
+        presidentPermissionNames = ["can_manage_captain_status",
+                                    "can_view_others_games",
+                                    "can_view_others_ratings",
+                                    "can_add_games",
+                                    "can_view_officer_list"]
 
         normalUserPermissionNames = ["eligible_to_be_officer"]
 
@@ -33,3 +40,7 @@ class Command(BaseCommand):
         for name in normalUserPermissionNames:
             permission = Permission.objects.get(codename=name)
             normal_user_group.permissions.add(permission)
+
+        for name in presidentPermissionNames:
+            permission = Permission.objects.get(codename=name)
+            president_group.permissions.add(permission)
