@@ -152,6 +152,8 @@ class PlayerDetailView(PermissionRequiredMixin, generic.DetailView):
         context["rating_deviation"] = round(player.rating.rating_deviation)
         context["confidence_interval_max"] = player.rating.rating + (2 * context["rating_deviation"])
         context["confidence_interval_min"] = player.rating.rating - (2 * context["rating_deviation"])
+        context["able_be_demoted_as_officer"] = player.has_perm("able_be_demoted_as_officer")
+        context["able_be_demoted_as_captain"] = player.has_perm("able_be_demoted_as_captain")
 
         if context["confidence_interval_min"] < 0:
             context["confidence_interval_min"] = 0

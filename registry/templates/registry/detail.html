@@ -9,6 +9,7 @@
 <p>Rating Deviation: {{ rating_deviation }}</p>
 <p>Confidence interval: [{{ confidence_interval_min }}, {{ confidence_interval_max }}]</p>
 
+{% if perms.accounts.can_manage_officer_status and able_to_be_demoted_as_officer %}
 <div class="big-button-wrapper">
     <form action="{% url 'registry:demote_officer' %}" method="post">
         {% csrf_token %}
@@ -16,6 +17,18 @@
         <button type="submit">Demote Officer</button>
     </form>
 </div>
+{% endif %}
+
+{% if perms.accounts.can_manage_captain_status and able_to_be_demoted_as_captain %}
+<div class="big-button-wrapper">
+    <form action="{% url 'registry:demote_captain' %}" method="post">
+        {% csrf_token %}
+        <input type="hidden" name="id" value="{{ player.id }}">
+        <button type="submit">Demote Captain</button>
+    </form>
+</div>
+{% endif %}
+
 
 <p><a href="javascript:history.back()">Go Back</a></p>
 {% endblock %}
