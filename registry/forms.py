@@ -39,3 +39,15 @@ class AddOfficerForm(forms.Form):
             raise forms.ValidationError("This user is not eligible to become an officer!")
 
         return user
+
+class AddCaptainForm(forms.Form):
+
+    selected_user = forms.ModelChoiceField(queryset=CustomUser.objects)
+
+    def clean_selected_user(self):
+        user = self.cleaned_data["selected_user"]
+
+        if not user.has_perm("accounts.eligible_to_be_captain"):
+            raise forms.ValidationError("This user is not eligible to become a captain!")
+
+        return user

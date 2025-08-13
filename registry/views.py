@@ -13,6 +13,7 @@ from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.contrib.auth.decorators import login_required, permission_required
 from .forms import AddGameForm
 from .forms import AddOfficerForm
+from .forms import AddCaptainForm
 from django.contrib.auth.models import Group
 from django.http import HttpResponse, HttpResponseRedirect
 
