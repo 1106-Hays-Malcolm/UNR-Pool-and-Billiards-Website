@@ -67,5 +67,6 @@ class CustomUser(AbstractUser):
             ("can_view_officers_list", "Can view the list of officer. Captains should have this permission."),
             ("can_manage_officer_status", "Can give or revoke the officer status from users. Captains should have this permission."),
             ("eligible_to_be_officer", "Is eligible to become an officer. Regular users should be eligible, but not current officers or captains."),
+            ("eligible_to_be_captain", "Is eligible to become a captain. Only officers should be eligible.")
             ("can_manage_captain_status", "Can give or revoke captain status from users. Only the president should have this permission")
         ]
