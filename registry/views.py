@@ -201,3 +201,47 @@ class DemoteOfficerView(PermissionRequiredMixin, View):
 
         response = HttpResponseRedirect(reverse("registry:officer_list"))
         return response
+
+class ListCaptainsView(PermissionRequiredMixin, generic.ListView):
+    permission_required = ["accounts.can_view_captains_list"]
+    raise_exception = True
+
+    template_name = "registry/captain_list.html"
+    context_object_name = "captain_list"
+
+    def get_queryset(self):
+        captain_group = Group.objects.get(name="Captains")
+        captain_list = CustomUser.objects.filter(groups=captain_group)
+
+        return captain_list
+
+
+class AddCaptainFormView(PermissionRequiredMixin, generic.FormView):
+    permission_required = ["accounts.can_manage_captain_status"]
+    raise_exception = True
+    template_name = "registry/add_captain_form.html"
+    form_class = AddOfficerForm
+    success_url = reverse_lazy("registry:captain_list")
+
+    def form_valid(self, form):
+        selected_user = form.cleaned_data["selected_user"]
+        captain_group = Group.objects.get(name="Captains")
+        selected_user.groups.clear()
+        selected_user.groups.add(captain_group)
+
+        return super().form_valid(form)
+
+class DemoteCaptainView(PermissionRequiredMixin, View):
+    permission_required = ["accounts.can_manage_captain_status"]
+    raise_exception = True
+
+    def post(self, request):
+        captain = CustomUser.objects.get(id=request.POST["id"])
+
+        normal_user_group = Group.objects.get(name="Normal Users")
+
+        captain.groups.clear()
+        captain.groups.add(normal_user_group)
+
+        response = HttpResponseRedirect(reverse("registry:captain_list"))
+        return response
