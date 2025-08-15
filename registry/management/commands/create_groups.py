@@ -13,21 +13,28 @@ class Command(BaseCommand):
 
         officerPermissionNames = ["can_view_others_games",
                                   "can_add_games",
-                                  "can_view_others_ratings"]
+                                  "can_view_others_ratings",
+                                  "able_to_be_demoted_as_officer",
+                                  "eligible_to_be_captain",
+                                  ]
 
         captainPermissionNames = ["can_view_officers_list",
                                   "can_manage_officer_status",
                                   "can_view_others_games",
                                   "can_add_games",
-                                  "can_view_others_ratings"]
+                                  "can_view_others_ratings",
+                                  "able_to_be_demoted_as_captain",
+                                  ]
 
         presidentPermissionNames = ["can_manage_captain_status",
                                     "can_view_others_games",
                                     "can_view_others_ratings",
                                     "can_add_games",
-                                    "can_view_officer_list"]
+                                    "can_view_officers_list",
+                                    ]
 
-        normalUserPermissionNames = ["eligible_to_be_officer"]
+        normalUserPermissionNames = ["eligible_to_be_officer"
+                                    ]
 
         for name in officerPermissionNames:
             permission = Permission.objects.get(codename=name)

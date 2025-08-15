@@ -7,7 +7,7 @@ from .views import AddOfficersFormView
 from .views import DemoteOfficerView
 from .views import AddCaptainFormView
 from .views import DemoteCaptainView
-from .views import ListCaptainView
+from .views import ListCaptainsView
 
 app_name = "registry"
 urlpatterns = [
@@ -20,6 +20,6 @@ urlpatterns = [
     path("demote_officer", DemoteOfficerView.as_view(), name="demote_officer"),
     path("add_captain", AddCaptainFormView.as_view(), name="add_captain"),
     path("demote_captain", DemoteCaptainView.as_view(), name="demote_captain"),
-    path("captain_list", ListCaptainView.as_view(), name="captain_list"),
+    path("captain_list", ListCaptainsView.as_view(), name="captain_list"),
 
 ]
