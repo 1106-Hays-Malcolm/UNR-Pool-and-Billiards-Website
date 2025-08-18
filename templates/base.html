@@ -20,6 +20,11 @@
             <a href="{% url "home" %}" class="logo-wrapper"><img src="{% static "images/logo.svg" %}" class="logo"></a>
             <nav class="navbar-links">
                 <ul>
+                    {% if perms.accounts.can_view_captains_list %}
+                    <li><a href="{% url 'registry:captain_list' %}">Captains</a></li>
+                    {% endif %}
+
+
                     {% if perms.accounts.can_view_officers_list %}
                     <li><a href="{% url 'registry:officer_list' %}">Officers</a></li>
                     {% endif %}
@@ -41,6 +46,7 @@
                     </li>
                     {% endif %}
 
+                    
                 </ul>
             </nav>
         </header>
