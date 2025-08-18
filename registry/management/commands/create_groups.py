@@ -27,10 +27,12 @@ class Command(BaseCommand):
                                   ]
 
         presidentPermissionNames = ["can_manage_captain_status",
+                                    "can_manage_officer_status",
                                     "can_view_others_games",
                                     "can_view_others_ratings",
                                     "can_add_games",
                                     "can_view_officers_list",
+                                    "can_view_captains_list",
                                     ]
 
         normalUserPermissionNames = ["eligible_to_be_officer"
