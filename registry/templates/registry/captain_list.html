@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %}View All Captains{% endblock %}
+
+{% block content %}
+
+<h1>Captain List</h1>
+
+<div class="big-button-wrapper"><a href="{% url "registry:add_captain" %}" class="big-button">Add a Captain</a></div>
+
+<div class="officer-wrapper">
+    {% for captain in captain_list %}
+
+        {% if forloop.counter != captain_list.count %}
+        <div class="officer-name-not-bottom">
+
+        {% else %}
+        <div class="officer-name-bottom">
+        {% endif %}
+
+        <a href="{% url 'registry:detail' captain.id %}">{{ captain.first_name }} {{ captain.last_name }}</a></div>
+    {% endfor %}
+</div>
+
+{% endblock %}
