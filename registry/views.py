@@ -152,14 +152,14 @@ class PlayerDetailView(PermissionRequiredMixin, generic.DetailView):
         context["rating_deviation"] = round(player.rating.rating_deviation)
         context["confidence_interval_max"] = player.rating.rating + (2 * context["rating_deviation"])
         context["confidence_interval_min"] = player.rating.rating - (2 * context["rating_deviation"])
-        context["able_be_demoted_as_officer"] = player.has_perm("able_be_demoted_as_officer")
-        context["able_be_demoted_as_captain"] = player.has_perm("able_be_demoted_as_captain")
+        context["able_to_be_demoted_as_officer"] = player.has_perm("accounts.able_to_be_demoted_as_officer")
+        context["able_to_be_demoted_as_captain"] = player.has_perm("accounts.able_to_be_demoted_as_captain")
 
         if context["confidence_interval_min"] < 0:
             context["confidence_interval_min"] = 0
 
         return context
-    
+
 
 class ListOfficersView(PermissionRequiredMixin, generic.ListView):
     permission_required = ["accounts.can_view_officers_list"]
@@ -223,7 +223,7 @@ class AddCaptainFormView(PermissionRequiredMixin, generic.FormView):
     permission_required = ["accounts.can_manage_captain_status"]
     raise_exception = True
     template_name = "registry/add_captain_form.html"
-    form_class = AddOfficerForm
+    form_class = AddCaptainForm
     success_url = reverse_lazy("registry:captain_list")
 
     def form_valid(self, form):
@@ -241,10 +241,10 @@ class DemoteCaptainView(PermissionRequiredMixin, View):
     def post(self, request):
         captain = CustomUser.objects.get(id=request.POST["id"])
 
-        normal_user_group = Group.objects.get(name="Normal Users")
+        officer_group = Group.objects.get(name="Officers")
 
         captain.groups.clear()
-        captain.groups.add(normal_user_group)
+        captain.groups.add(officer_group)
 
         response = HttpResponseRedirect(reverse("registry:captain_list"))
         return response
