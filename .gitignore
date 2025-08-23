@@ -2,6 +2,7 @@
 .vscode
 .coverage
 .env
+env
 db.sqlite3
 **/__pycache__
 *.kdev4

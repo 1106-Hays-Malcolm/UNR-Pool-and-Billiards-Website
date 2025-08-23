@@ -12,6 +12,8 @@ WORKDIR /app
 ENV PYTHONDONTWRITEBYTECODE=1
 #Prevents Python from buffering stdout and stderr
 ENV PYTHONUNBUFFERED=1 
+
+ENV DEGUG='true'
  
 # Upgrade pip
 RUN pip install --upgrade pip 
@@ -29,4 +31,5 @@ COPY . /app/
 EXPOSE 8000
  
 # Run Django’s development server
+CMD ["export", "DEBUG=true"]
 CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
