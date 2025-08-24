@@ -14,6 +14,7 @@ from pathlib import Path
 import os
 from warnings import warn
 from dotenv import load_dotenv
+import netifaces
 
 load_dotenv()  # take environment variables
 
@@ -42,8 +43,18 @@ elif not DEBUG:
     print("Debug mode is off. This is the correct setting for production, but if Django's development server is not loading the static files, this is probably the reason.")
 
 # ALLOWED_HOSTS = ['*']
+def ip_addresses():
+    ip_list = []
+    for interface in netifaces.interfaces():
+        addrs = netifaces.ifaddresses(interface)
+        for x in (netifaces.AF_INET, netifaces.AF_INET6):
+            if x in addrs:
+                ip_list.append(addrs[x][0]['addr'])
+    return ip_list
 
-ALLOWED_HOSTS = os.getenv("DJANGO_ALLOWED_HOSTS","127.0.0.1").split(",")
+ALLOWED_HOSTS = ip_addresses()
+
+# ALLOWED_HOSTS = os.getenv("DJANGO_ALLOWED_HOSTS","127.0.0.1").split(",")
 
 
 # Application definition
