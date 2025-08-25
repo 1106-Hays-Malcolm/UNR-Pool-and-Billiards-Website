@@ -33,7 +33,13 @@ SECRET_KEY = os.getenv("SECRET_KEY", default='django-insecure-*$=x00ahgd9*ss1=s9
 
 # SECURITY WARNING: don't run with debug turned on in production!
 
-DEBUG = bool(os.getenv("DEBUG", default=0))
+DEBUG = str(os.getenv("DEBUG", default=0))
+
+print(DEBUG)
+if DEBUG == "true" or DEBUG == "True" or DEBUG == "1":
+    DEBUG = True
+else:
+    DEBUG = False
 
 if os.getenv("DEBUG") is None:
     print("The DEBUG enviroment variable is not set! Debug mode is turned off by default.\nIf debug mode is off, static files will not be loaded by the Django devleopment server.")
