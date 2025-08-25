@@ -16,6 +16,9 @@ from warnings import warn
 from dotenv import load_dotenv
 import netifaces
 
+import logging 
+logging.basicConfig(level='DEBUG')
+
 load_dotenv()  # take environment variables
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
