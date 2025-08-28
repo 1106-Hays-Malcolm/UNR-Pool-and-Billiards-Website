@@ -1,6 +1,8 @@
 from django.db import models
-
 from django.contrib.auth.models import AbstractUser, BaseUserManager
+from django.utils import timezone
+import uuid
+
 
 class MyUserManager(BaseUserManager):
     def create_user(self, email, first_name, last_name, password=None):
@@ -10,13 +12,13 @@ class MyUserManager(BaseUserManager):
         """
         if not email:
             raise ValueError("Users must have an email address")
-        
+
         if not first_name:
             raise ValueError("Users must have a fist name")
-        
+
         if not last_name:
             raise ValueError("Users must have a last name")
-        
+
         if not password:
             raise ValueError("Users must have a password")
 
@@ -47,20 +49,28 @@ class MyUserManager(BaseUserManager):
         user.is_superuser = True
         user.save(using=self._db)
         return user
-    
+
 
 class CustomUser(AbstractUser):
-    
+
     username = None
     email = models.EmailField(unique=True, max_length=255)
 
     objects = MyUserManager()
+
+    email_verified = models.BooleanField(default=False)
+    verification_token = models.UUIDField(default=uuid.uuid4)
+    token_created_at = models.DateTimeField(default=timezone.now)
 
     REQUIRED_FIELDS = ['first_name', 'last_name']
     USERNAME_FIELD = 'email'
 
     def __str__(self):
         return self.first_name + " " + self.last_name
+
+    def token_is_valid(self):
+        # Token is valid for 24 hours after creation
+        return timezone.now() < self.token_created_at + timezone.timedelta(hours=24)
 
     class Meta:
         permissions = [
