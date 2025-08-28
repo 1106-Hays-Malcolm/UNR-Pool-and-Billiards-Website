@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block title %}Verification Failed{% endblock title %}
+
+{% block content %}
+<div class="verification-container">
+    <h2>Email Verification</h2>
+    <div class="alert alert-danger">
+        <p>{{ message }}</p>
+    </div>
+    <p><a href="{% url 'accounts:register' %}" class="btn btn-primary">Register Again</a></p>
+</div>
+{% endblock %}
